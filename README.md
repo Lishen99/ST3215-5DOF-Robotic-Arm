@@ -31,14 +31,13 @@ This project provides a Python-based control system for a 5-DOF robot arm utiliz
 *   `STServo_Python/`: Contains the low-level STServo SDK files and communication protocols.
 *   `requirements.txt`: Lists all Python dependencies required for the project.
 *   `backups/`: Contains older versions or backups of project files.
-*   `arm_design_files/`: Contains SolidWorks part files and STL models for the robot arm's mechanical components.
+*   `Arm_Design/`: Contains SolidWorks part files and STL models for the robot arm's mechanical components.
 
 ## Setup Instructions
 
 1.  **Clone the Repository**:
     ```bash
-    git clone <your-repository-url>
-    cd STServo_Python
+    git clone https://github.com/Lishen99/ST3215-5DOF-Robotic-Arm.git
     ```
 
 2.  **Create and Activate Virtual Environment**:
@@ -59,7 +58,15 @@ This project provides a Python-based control system for a 5-DOF robot arm utiliz
 4.  **Connect the Robot Arm**:
     Ensure your ST3215 robot arm is physically connected to your computer via a USB-to-serial adapter. Note the COM port it is connected to (e.g., `COM3` on Windows, `/dev/ttyUSB0` on Linux).
 
-5.  **Run the GUI**:
+5. **Calibrate the Motors**:
+   Navigate to the `jacob_ik` directory and run the calibrate_servos.py:
+    ```bash
+    cd jacob_ik
+    python calibrate_servos.py
+    ```
+    Follow the instructions provided in the Terminal.
+   
+7.  **Run the GUI**:
     Navigate to the `jacob_ik` directory and run the main GUI application:
     ```bash
     cd jacob_ik
