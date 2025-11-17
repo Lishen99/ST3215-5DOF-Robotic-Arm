@@ -10,7 +10,6 @@ venv/
 *.bak
 
 # Virtual environment
-stservo-env/
 
 # IDEs
 .vscode/
