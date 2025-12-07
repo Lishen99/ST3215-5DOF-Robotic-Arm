@@ -101,7 +101,10 @@ class MotorControlGUI:
     def refresh_com_ports(self):
         ports = [port.device for port in serial.tools.list_ports.comports()]
         self.com_port_menu['values'] = ports
-        if ports: self.com_port_var.set(ports[0])
+        if "COM3" in ports:
+            self.com_port_var.set("COM3")
+        elif ports:
+            self.com_port_var.set(ports[0])
 
     def scan_for_motors(self):
         port = self.com_port_var.get()
@@ -195,42 +198,54 @@ class MotorControlGUI:
 
     def update_ui(self, all_motor_data):
         if self.is_closing: return
+        try:
+            if not self.master.winfo_exists(): return
+        except: return
+
         for motor_id, data in all_motor_data.items():
             if motor_id in self.info_labels:
-                self.info_labels[motor_id]['pos'].config(text=str(data.get('pos', '---')))
-                volt_val = data.get('volt', '---')
-                temp_val = data.get('temp', '---')
-                self.info_labels[motor_id]['volt'].config(text=f"{volt_val:.1f}" if isinstance(volt_val, (int, float)) else str(volt_val))
-                self.info_labels[motor_id]['temp'].config(text=f"{temp_val:.1f}" if isinstance(temp_val, (int, float)) else str(temp_val))
+                try:
+                    self.info_labels[motor_id]['pos'].config(text=str(data.get('pos', '---')))
+                    volt_val = data.get('volt', '---')
+                    temp_val = data.get('temp', '---')
+                    self.info_labels[motor_id]['volt'].config(text=f"{volt_val:.1f}" if isinstance(volt_val, (int, float)) else str(volt_val))
+                    self.info_labels[motor_id]['temp'].config(text=f"{temp_val:.1f}" if isinstance(temp_val, (int, float)) else str(temp_val))
+                except tk.TclError: pass
         self.update_plot()
 
     def update_plot(self):
         if self.is_closing: return
-        q_rad = self.controller.current_q_rad
-        joint_coords = kinematics.forward_kinematics(q_rad)
+        try:
+            if not self.master.winfo_exists(): return
+        except: return
         
-        current_pos = joint_coords[-1]
-        self.x_pos_label.config(text=f"X: {current_pos[0]:.2f} mm")
-        self.y_pos_label.config(text=f"Y: {current_pos[1]:.2f} mm")
-        self.z_pos_label.config(text=f"Z: {current_pos[2]:.2f} mm")
+        try:
+            q_rad = self.controller.current_q_rad
+            joint_coords = kinematics.forward_kinematics(q_rad)
+            
+            current_pos = joint_coords[-1]
+            self.x_pos_label.config(text=f"X: {current_pos[0]:.2f} mm")
+            self.y_pos_label.config(text=f"Y: {current_pos[1]:.2f} mm")
+            self.z_pos_label.config(text=f"Z: {current_pos[2]:.2f} mm")
 
-        self.ax.clear()
-        # The first point (p0) is the floor origin, the second (p1) is the shoulder.
-        # We draw the static base link from floor to shoulder.
-        self.ax.plot([joint_coords[0][0], joint_coords[1][0]], 
-                     [joint_coords[0][1], joint_coords[1][1]], 
-                     [joint_coords[0][2], joint_coords[1][2]], 
-                     'o-', color='grey', lw=3, markersize=6)
-        # Then, draw the moving part of the arm from the shoulder onwards.
-        self.ax.plot([p[0] for p in joint_coords[1:]], 
-                     [p[1] for p in joint_coords[1:]], 
-                     [p[2] for p in joint_coords[1:]], 
-                     'o-', color='dodgerblue', lw=3, markersize=6)
+            self.ax.clear()
+            # The first point (p0) is the floor origin, the second (p1) is the shoulder.
+            # We draw the static base link from floor to shoulder.
+            self.ax.plot([joint_coords[0][0], joint_coords[1][0]], 
+                        [joint_coords[0][1], joint_coords[1][1]], 
+                        [joint_coords[0][2], joint_coords[1][2]], 
+                        'o-', color='grey', lw=3, markersize=6)
+            # Then, draw the moving part of the arm from the shoulder onwards.
+            self.ax.plot([p[0] for p in joint_coords[1:]], 
+                        [p[1] for p in joint_coords[1:]], 
+                        [p[2] for p in joint_coords[1:]], 
+                        'o-', color='dodgerblue', lw=3, markersize=6)
 
-        self.ax.scatter([0], [0], [0], c='red', s=100, marker='X', label='Origin')
-        max_reach = sum(kinematics.LINK_LENGTHS); self.ax.set_xlim([-max_reach, max_reach]); self.ax.set_ylim([-max_reach, max_reach]); self.ax.set_zlim([0, max_reach])
-        self.ax.set_xlabel('X (mm)'); self.ax.set_ylabel('Y (mm)'); self.ax.set_zlabel('Z (mm)'); self.ax.view_init(elev=30., azim=45)
-        self.canvas.draw()
+            self.ax.scatter([0], [0], [0], c='red', s=100, marker='X', label='Origin')
+            max_reach = sum(kinematics.LINK_LENGTHS); self.ax.set_xlim([-max_reach, max_reach]); self.ax.set_ylim([-max_reach, max_reach]); self.ax.set_zlim([0, max_reach])
+            self.ax.set_xlabel('X (mm)'); self.ax.set_ylabel('Y (mm)'); self.ax.set_zlabel('Z (mm)'); self.ax.view_init(elev=30., azim=45)
+            self.canvas.draw()
+        except tk.TclError: pass
 
     def set_motion_ui_state(self, is_moving):
         button_text = "Stop Motion" if is_moving else "Move to Target"

@@ -9,7 +9,7 @@ LINK_LENGTHS = [L1, L2, L3]
 
 # --- Advanced Kinematic Functions ---
 
-def get_jacobian_pinv_damped(J, damping_factor=0.1):
+def get_jacobian_pinv_damped(J, damping_factor=0.01):
     """
     Calculates the damped least-squares pseudoinverse (Levenberg-Marquardt).
     """
@@ -18,6 +18,16 @@ def get_jacobian_pinv_damped(J, damping_factor=0.1):
     k_sq = damping_factor**2
     inv_term = np.linalg.inv(J @ J_T + k_sq * I)
     return J_T @ inv_term
+
+def calculate_adaptive_damping(J, lambda_max=0.01, epsilon=0.05):
+    """
+    Calculates an adaptive damping factor based on manipulability.
+    lambda = lambda_max * (1 - w/epsilon)^2 if w < epsilon else 0
+    """
+    w = calculate_manipulability(J)
+    if w < epsilon:
+        return lambda_max * (1 - w/epsilon)**2
+    return 0.0
 
 def calculate_manipulability(J):
     """
