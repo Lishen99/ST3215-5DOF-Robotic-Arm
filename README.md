@@ -335,11 +335,36 @@ python motor_gui.py
 - **Workspace**: ~300mm radius hemisphere
 - **Payload**: TBD (depends on servo torque)
 
-### Servo Configuration
-- **Model**: Waveshare ST3215
-- **Communication**: Half-duplex serial bus (RS-485 style)
+### Servo Configuration & Communication
+
+**Servos:**
+- **Model**: Waveshare ST3215 Serial Bus Servos
 - **Resolution**: 4096 steps/revolution (0.088°/step)
-- **Baud Rate**: 1000000 (servos) / 921600 (Teensy USB)
+- **Communication Protocol**: Half-duplex serial (RS-485 style)
+- **Baud Rate**: 1000000 bps
+- **Daisy Chain**: All servos on single serial bus with unique IDs
+
+**Serial Bus Driver Board:**
+- **Required**: Waveshare Serial Bus Servo Driver Board or equivalent
+- **Function**: Converts TTL serial to half-duplex servo bus
+- **Direction Control**: GPIO pin switches between TX/RX
+- **Connections**:
+  - Microcontroller TX → Driver TX
+  - Microcontroller RX → Driver RX
+  - Microcontroller GPIO → Driver DIR (direction control)
+  - Driver Bus → Servo chain (daisy-chained)
+
+**STServo SDK:**
+- **Protocol**: Proprietary Waveshare protocol (similar to Dynamixel)
+- **Python SDK**: Included in `STServo_Python/` directory
+- **C++ Drivers**: Custom implementations in firmware (`ServoDriver.h`)
+- **Commands**: Position, speed, voltage, temperature, torque enable/disable
+
+**Why Serial Bus?**
+- Single communication line for all servos (not PWM)
+- Position feedback built-in (closed-loop control)
+- Daisy-chain reduces wiring complexity
+- Real-time telemetry (position, voltage, temperature)
 
 ---
 
