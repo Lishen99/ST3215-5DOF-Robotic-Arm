@@ -2,36 +2,36 @@
 
 Advanced control system for a 5-DOF robotic arm using ST3215 servo motors. This repository contains **multiple control implementations** ranging from direct Python control to high-performance embedded systems, providing flexibility for different applications and performance requirements.
 
-## 🎯 Overview
+##  Overview
 
 This project features **four distinct control approaches**, each with unique strengths:
 
-1. **🚀 Teensy 4.1 QP-MPC** *(Recommended - Production Ready)*
+1. ** Teensy 4.1 QP-MPC** *(Recommended - Production Ready)*
    - 815Hz control loop with Model Predictive Control
    - Sub-millimeter precision with automatic tuning
    - Best for: Research applications, high-precision tasks
 
-2. **⚡ ESP32 MPC Hybrid**
+2. ** ESP32 MPC Hybrid**
    - 200Hz Jacobian + MPC constraint projection
    - Balanced performance and complexity
    - Best for: Real-time applications, smooth motion
 
-3. **🔧 ESP32 Jacobian IK**
+3. ** ESP32 Jacobian IK**
    - Pure Jacobian velocity control with PID
    - Simple and reliable
    - Best for: Basic automation, learning
 
-4. **🐍 Direct Python Control**
+4. ** Direct Python Control**
    - PC-based control (Jacob IK / Analytical IK)
    - No microcontroller firmware needed
    - Best for: Prototyping, testing, education
 
-## 📁 Complete Project Structure
+##  Complete Project Structure
 
 ```
-📦 ST3215-5DOF-Robotic-Arm/
+ ST3215-5DOF-Robotic-Arm/
 │
-├── 🚀 microcontroller_arm_control/     # HIGH-PERFORMANCE EMBEDDED
+├──  microcontroller_arm_control/     # HIGH-PERFORMANCE EMBEDDED
 │   ├── firmware_teensy_qp/             # ★ RECOMMENDED: Teensy 4.1 (815Hz QP-MPC)
 │   │   ├── src/main.cpp                # Main control loop
 │   │   ├── include/
@@ -47,7 +47,7 @@ This project features **four distinct control approaches**, each with unique str
 │       ├── arm_config.json             # Robot configuration
 │       └── mpc_params.json             # Tuned MPC parameters
 │
-├── ⚡ esp32_arm_control/                # ESP32 IMPLEMENTATIONS
+├──  esp32_arm_control/                # ESP32 IMPLEMENTATIONS
 │   ├── firmware/                       # ESP32 Jacobian IK (PID-based)
 │   │   ├── src/main.cpp                # Pure Jacobian control (~200Hz)
 │   │   ├── include/
@@ -71,7 +71,7 @@ This project features **four distinct control approaches**, each with unique str
 │       ├── auto_pid_calibrate.py       # PID auto-tuner
 │       └── arm_config.json
 │
-├── 🐍 jacob_ik/                         # PYTHON JACOBIAN CONTROL
+├──  jacob_ik/                         # PYTHON JACOBIAN CONTROL
 │   ├── arm_controller.py               # Direct USB control (PC-based)
 │   ├── motor_gui.py                    # Real-time GUI with 3D visualization
 │   ├── kinematics.py                   # FK/IK/Jacobian/DLS implementation
@@ -80,31 +80,31 @@ This project features **four distinct control approaches**, each with unique str
 │   ├── calibrate_servos.py             # Servo calibration tool
 │   └── servo_limits.json               # Joint limits and parameters
 │
-├── 🔬 analytical_ik/                    # PYTHON ANALYTICAL CONTROL
+├──  analytical_ik/                    # PYTHON ANALYTICAL CONTROL
 │   ├── arm_controller.py               # Direct USB control (PC-based)
 │   ├── motor_gui.py                    # GUI interface
 │   ├── kinematics.py                   # Closed-form IK solution
 │   ├── calibrate_servos.py             # Calibration tool
 │   └── servo_limits.json
 │
-├── 🛠️ Arm_Design/                       # MECHANICAL CAD FILES
+├──  Arm_Design/                       # MECHANICAL CAD FILES
 │   ├── Assembly.SLDASM                 # SolidWorks assembly
 │   ├── *.SLDPRT                        # Individual parts
 │   └── STL/                            # 3D printable files
 │
-├── 🧪 waveshare_diagnostic/             # TESTING & DIAGNOSTICS
+├──  waveshare_diagnostic/             # TESTING & DIAGNOSTICS
 │   ├── test_motor1.py                  # Individual motor tests
 │   ├── scan_baud.py                    # Baud rate scanner
 │   └── recover_servos.py               # Servo recovery tools
 │
-├── 📋 requirements.txt                  # Python dependencies
-└── 📖 README.md                         # This file
+├──  requirements.txt                  # Python dependencies
+└──  README.md                         # This file
 
 ```
 
 ---
 
-## 🚀 Implementation #1: Teensy 4.1 QP-MPC (Recommended)
+##  Implementation #1: Teensy 4.1 QP-MPC (Recommended)
 
 ### Overview
 **Highest performance** system with Model Predictive Control running at **815Hz**. Uses Quadratic Programming (QP) solver for optimal control with terminal posture constraints.
@@ -169,7 +169,7 @@ S                         # Stop
 
 ---
 
-## ⚡ Implementation #2: ESP32 MPC Hybrid
+##  Implementation #2: ESP32 MPC Hybrid
 
 ### Overview
 **Balanced approach** combining Jacobian velocity control with MPC constraint projection. Runs at ~200Hz on ESP32.
@@ -245,7 +245,7 @@ python auto_pid_calibrate.py
 
 ---
 
-## 🐍 Implementation #4: Direct Python Control
+##  Implementation #4: Direct Python Control
 
 ### Overview
 **PC-based control** without microcontroller firmware. Python directly commands servos via USB. Two variants available:
@@ -314,7 +314,7 @@ python motor_gui.py
 
 ---
 
-## 🛠️ Hardware Specifications
+##  Hardware Specifications
 
 ### Required Components
 - **Microcontroller** (choose one):
@@ -368,7 +368,7 @@ python motor_gui.py
 
 ---
 
-## 🔧 Installation & Setup Guide
+##  Installation & Setup Guide
 
 ### 1. Clone Repository
 ```bash
@@ -434,7 +434,7 @@ python motor_gui.py           # Run controller
 
 ---
 
-## 📊 Performance Comparison
+##  Performance Comparison
 
 | Feature | Teensy QP-MPC | ESP32 Hybrid | ESP32 Jacobian | Python Direct |
 |---------|--------------|--------------|----------------|---------------|
@@ -449,7 +449,7 @@ python motor_gui.py           # Run controller
 
 ---
 
-## 🎮 Usage Examples
+##  Usage Examples
 
 ### Example 1: Cartesian Move (Teensy)
 ```bash
@@ -497,7 +497,7 @@ python motor_gui.py
 
 ---
 
-## 🔍 Key Algorithms
+##  Key Algorithms
 
 ### QP-MPC (Teensy Implementation)
 
@@ -543,7 +543,7 @@ q̇_final = q̇_task + α * q̇_posture
 
 ---
 
-## 🐛 Troubleshooting
+##  Troubleshooting
 
 ### Teensy Not Connecting
 - Check COM port in Device Manager
@@ -577,7 +577,7 @@ python recover_servos.py   # Factory reset if needed
 
 ---
 
-## 🏆 Key Innovations
+##  Key Innovations
 
 ### 1. Terminal Posture MPC
 MPC optimizes not just trajectory tracking but also **terminal joint configuration**. This maintains favorable "elbow-up" poses and avoids singularities automatically.
@@ -617,7 +617,7 @@ Uses raw servo positions (4096 steps/rev) instead of floating-point angles for t
 
 ---
 
-## 🚧 Known Issues & Future Work
+##  Known Issues & Future Work
 
 ### Current Limitations
 1. **Motor 6 (Roll)**: Excluded from MPC tuning for safety
@@ -634,7 +634,7 @@ Uses raw servo positions (4096 steps/rev) instead of floating-point angles for t
 
 ---
 
-## 📄 License
+##  License
 
 This project is licensed under the [Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA 4.0) License](https://creativecommons.org/licenses/by-nc-sa/4.0/).
 
@@ -642,7 +642,7 @@ You are free to share and adapt the material for non-commercial purposes, provid
 
 ---
 
-## 🙏 Credits
+##  Credits
 
 - **Hardware/SDK**: Waveshare ST3215 servo motors and STServo SDK
 - **MPC Library**: Custom QP-MPC implementation based on TinyMPC concepts
@@ -651,7 +651,7 @@ You are free to share and adapt the material for non-commercial purposes, provid
 
 ---
 
-## 📞 Contact & Support
+##  Contact & Support
 
 - **GitHub Issues**: [Report bugs or request features](https://github.com/Lishen99/ST3215-5DOF-Robotic-Arm/issues)
 - **Discussions**: Share your builds and ask questions
@@ -659,10 +659,10 @@ You are free to share and adapt the material for non-commercial purposes, provid
 
 ---
 
-**⚡ Choose Your Implementation:**
-- 🚀 **Research/Precision** → Teensy QP-MPC (815Hz)
-- ⚡ **Real-time Apps** → ESP32 MPC Hybrid (200Hz)
-- 🔧 **Learning/Automation** → ESP32 Jacobian IK
-- 🐍 **Prototyping/Testing** → Python Direct Control
+** Choose Your Implementation:**
+-  **Research/Precision** → Teensy QP-MPC (815Hz)
+-  **Real-time Apps** → ESP32 MPC Hybrid (200Hz)
+-  **Learning/Automation** → ESP32 Jacobian IK
+-  **Prototyping/Testing** → Python Direct Control
 
-**Happy Building! 🤖**
+**Happy Building! **
